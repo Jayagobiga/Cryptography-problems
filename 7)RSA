@@ -1,48 +1,42 @@
-#include<stdio.h>
-#include<math.h>
-int gcd(int a, int h)
-{
-    int temp;
-    while(1)
-    {
-        temp = a%h;
-        if(temp==0)
-        return h;
-        a = h;
-        h = temp;
-    }
+#include <stdio.h>
+#include <math.h>
+
+// Function to calculate greatest common divisor (GCD)
+int gcd(int a, int b) {
+    if (b == 0)
+        return a;
+    return gcd(b, a % b);
 }
-int main()
-{
-    double p = 3;
-    double q = 7;
-    double n=p*q;
-    double count;
-    double totient = (p-1)*(q-1);
-    double e=2;
-    while(e<totient){
-    count = gcd(e,totient);
-    if(count==1)
-        break;
-    else
+
+int main() {
+    int p = 7; // Replace with a prime number
+    int q = 11; // Replace with another prime number
+    int n = p * q;
+    int phi = (p - 1) * (q - 1);
+    int e = 17; // Replace with a suitable public exponent
+    int d;
+
+    // Ensure e and phi are coprime
+    while (gcd(e, phi) != 1) {
         e++;
-}
-    double d;
-    double k = 2;
-    d = (1 + (k*totient))/e;
-    double msg = 12;
-    double c = pow(msg,e);
-    double m = pow(c,d);
-    c=fmod(c,n);
-    m=fmod(m,n);
-    printf("Message data = %lf",msg);
-    printf("\np = %lf",p);
-    printf("\nq = %lf",q);
-    printf("\nn = pq = %lf",n);
-    printf("\ntotient = %lf",totient);
-    printf("\ne = %lf",e);
-    printf("\nd = %lf",d);
-    printf("\nEncrypted data = %lf",c);
-    printf("\nOriginal Message Sent = %lf",m);
+    }
+
+    // Calculate the private key d
+    int k = 1;
+    while (1) {
+        d = (k * phi + 1) / e;
+        if ((k * phi + 1) % e == 0)
+            break;
+        k++;
+    }
+
+    int plaintext = 42; // Replace with your message
+    int ciphertext = fmod(pow(plaintext, e), n);
+    int decrypted = fmod(pow(ciphertext, d), n);
+
+    printf("Plaintext: %d\n", plaintext);
+    printf("Ciphertext: %d\n", ciphertext);
+    printf("Decrypted: %d\n", decrypted);
+
     return 0;
 }
